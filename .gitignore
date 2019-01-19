@@ -1,0 +1,7 @@
+.idea
+build
+dist
+geckodriver.log
+gedmatch_tools.egg-info/
+.mypy_cache/
+__pycache__/
