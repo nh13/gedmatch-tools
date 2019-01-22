@@ -1,5 +1,6 @@
 '''Useful utility methods.'''
 
+import logging
 import os
 from pathlib import Path
 from typing import Optional
@@ -23,6 +24,7 @@ def main_page() -> WebDriver:
 
     try:
         # login
+        logging.info(f'Logging into: {genesis_login_url}')
         driver.get(genesis_login_url)
 
         email_element = driver.find_element_by_name('email')
@@ -41,6 +43,8 @@ def main_page() -> WebDriver:
         driver.close()
         raise e
 
+    logging.info(f'Logged into: {genesis_login_url}')
+
     return driver
 
 
@@ -49,12 +53,16 @@ class Kit(object):
     '''Class for storing information about a GEDMatch kit.
 
     Attributes:
-        name: the name of the kit (assigned during import)
-        number: the number of the kit (assigned by GEDMatch)
+        name: the name of the kit (assigned during import).
+        number: the number of the kit (assigned by GEDMatch).
+        email: the email used to register the kit.
+        testing_company: the testing company of the kit.
     '''
 
     name: str = attr.ib()
     number: str = attr.ib()
+    email: Optional[str] = attr.ib(default=None, metadata={'print': False})
+    testing_company: Optional[str] = attr.ib(default=None, metadata={'print': False})
 
 
 @attr.s(frozen=True)

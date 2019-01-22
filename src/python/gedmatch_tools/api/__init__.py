@@ -3,8 +3,10 @@ from typing import Dict, List, Optional
 
 from gedmatch_tools.api._add import _add
 from gedmatch_tools.api._ls import _ls
-from gedmatch_tools.api._one_to_one import _one_to_one, OneToOneAutosomeResult
+from gedmatch_tools.api._one_to_many import OneToManyAutosomeResult  # noqa: F401
+from gedmatch_tools.api._one_to_many import _one_to_many
 from gedmatch_tools.api._one_to_one import SegmentResult  # noqa: F401
+from gedmatch_tools.api._one_to_one import _one_to_one, OneToOneAutosomeResult
 from gedmatch_tools.api._rm import _rm
 from gedmatch_tools.util import Kit
 
@@ -26,6 +28,25 @@ def one_to_one(kit_one: str,
         None if the analysis did not find any segments, otherwise the analysis results.
     '''
     return _one_to_one(kit_one, kit_two, output_prefix, kits)
+
+
+def one_to_many(kit: str,
+                output: Path,
+                max_matches: Optional[int],
+                kits: Optional[Dict[str, Kit]] = None
+                ) -> List[OneToManyAutosomeResult]:
+    '''Performs one-to-many autosomal analysis.
+
+    Args:
+        kit: the name or number
+        output: the output file.
+        max_matches: the maximum # of matches to return
+        kits: a mapping of kit name to kit, useful when performing many 1:1 analyses.
+
+    Returns:
+        A list of matches.
+    '''
+    return _one_to_many(kit, output, max_matches, kits)
 
 
 def add(genotypes: Path, name: str, fam: Optional[Path] = None) -> Kit:

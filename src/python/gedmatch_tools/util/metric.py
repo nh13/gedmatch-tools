@@ -8,7 +8,7 @@ from typing import Any, List, Tuple
 import attr
 
 
-def _to_tuples(obj: Any) -> List[Tuple[str, str]]:
+def _to_tuples(obj: Any, print_all: bool = True) -> List[Tuple[str, str]]:
     '''Returns a list of name/value tuples for each attribute in the object.
 
     The object must be decorated by the :py:mod:`~attr` module.  If the object contains an
@@ -21,7 +21,7 @@ def _to_tuples(obj: Any) -> List[Tuple[str, str]]:
     '''
     cls = obj.__class__
     attribute_names = [a.name for a in attr.fields(cls)
-                       if 'print' not in a.metadata or a.metadata['print']]
+                       if print_all or 'print' not in a.metadata or a.metadata['print']]
     raw_values = [(name, getattr(obj, name)) for name in attribute_names]
     values: List[Tuple[str, str]] = []
     for name, raw_value in raw_values:
@@ -29,7 +29,7 @@ def _to_tuples(obj: Any) -> List[Tuple[str, str]]:
             values.append((name, str(raw_value)))
         else:
             values.extend([(f'{name}_{sub_name}', sub_value)
-                           for sub_name, sub_value in _to_tuples(raw_value)])
+                           for sub_name, sub_value in _to_tuples(raw_value, print_all=False)])
 
     return values
 
