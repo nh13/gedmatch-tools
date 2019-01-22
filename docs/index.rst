@@ -29,6 +29,18 @@ To install the latest release, type::
 
 See the :ref:`Installation notes <installation>` for details.
 
+GEDMatch.com Credentials
+========================
+
+GEDMatch.com credentials can retrieved in two ways:
+
+1. Create a CSV file in `~/.gedmatch` with the following contents::
+
+    email,<your-email>
+    password,<your-password>
+
+2. Copy your email and password into the environment variables `GEDMATCH_EMAIL` and `GEDMATCH_PASSWORD` respectively.
+
 Indices and tables
 ------------------
 

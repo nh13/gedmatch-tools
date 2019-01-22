@@ -28,34 +28,14 @@ For example, the tool to list all kits is `gedmatch-tools ls --help`
 
 See the following [Documentation](https://gedmatch-tools.readthedocs.io/en/latest/).
 
-Until online documentation is available, see [API in the source](https://github.com/nh13/gedmatch-tools/blob/master/src/python/gedmatch_tools/api/__init__.py).
-Alternatively, you can build API documentation locally with:
-```bash
-cd docs
-make
-open _build/html/index.html
-```
+See the [Usage](https://gedmatch-tools.readthedocs.io/en/latest/usage.html) for example tool usage .
 
-## GEDMatch.com Credentials
-
-GEDMatch.com redentials can retrieved in two ways:
-
-1. Create a CSV file in `~/.gedmatch` with the following contents:
-
-```
-email,<your-email>
-password,<your-password>
-```
-2. Copy your email and password into the environment variables `GEDMATCH_EMAIL` and `GEDMATCH_PASSWORD` respectively.
+See the [API](https://gedmatch-tools.readthedocs.io/en/latest/api.html) for using `gedmatch-tools` programatically.
 
 ## Items to be completed prior to an initial release
 
 - [ ] remaining features
-  - [ ] 1:many autosomal comparison analysis
   - [ ] add github issues for other applications/routes (user-requests?)
-- [ ] documentation
-  - [ ] module, class, and method docs
-  - [ ] web-hosted tool and python API documentation (readthedocs.io)
 - [ ] packaging and distribution
   - [ ] bioconda
   - [ ] pypi
@@ -64,7 +44,8 @@ password,<your-password>
   - [ ] uni testing
     - [ ] parsing credentials (`.gedmatch` file, environment variables)
     - [ ] getting to the main page (`gedmatch_tools.util.main_page()`)
-    - [ ] adding a kit or kits (`gedmatch_tools.tools.add_kit.*`)
-    - [ ] listing already added/uploaded kits (`gedmatch_tools.tools.list_kits`)
-    - [ ] delete kit or kits ( `gedmatch_tools.tools.delete_kits`)
-    - [ ] perform one or more 1:1 autosomal analyses (`gedmatch_tools.tools.one_to_one_autosomal`)
+    - [ ] adding a kit or kits (`gedmatch_tools.tools.add.*`)
+    - [ ] listing already added/uploaded kits (`gedmatch_tools.tools.ls`)
+    - [ ] delete kit or kits ( `gedmatch_tools.tools.rm`)
+    - [ ] perform one or more 1:1 autosomal analyses (`gedmatch_tools.tools.one_to_one`)
+    - [ ] perform one or more 1:many autosomal analyses (`gedmatch_tools.tools.one_to_many`)
