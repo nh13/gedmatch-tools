@@ -20,7 +20,7 @@ def add(*, genotypes: Path, name: str, fam: Optional[Path] = None) -> None:
     add_api(genotypes, name, fam)
 
 
-def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None) -> None:
+def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None, keep_going: bool = False) -> None:
     '''Performs a generic upload of one or more genotypes specified in a manifest file.
 
     The sample information when given will be used to determine the sex of the donor, otherwise
@@ -49,7 +49,18 @@ def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None
             name = d['name']
             genotypes_path = Path(d['genotypes_path'])
             logging.info(f'Uploading {name}: {genotypes_path}')
-            kit = add_api(genotypes_path, name, fam)
-            logging.info(f'Kit number: {kit.number}')
-            fields = fields + [kit.number]
+            kit = None
+            try:
+                kit = add_api(genotypes_path, name, fam)
+            except Exception as e:
+                if not keep_going:
+                    logging.warning('Upload failed {name}: {genotypes_path}')
+                    raise e
+                else:
+                    logging.exception('Upload failed {name}: {genotypes_path}')
+            if kit is None:
+                fields = fields + ['failed']
+            else:
+                logging.info(f'Kit number: {kit.number}')
+                fields = fields + [kit.number]
             fh_out.write(','.join(fields) + '\n')
