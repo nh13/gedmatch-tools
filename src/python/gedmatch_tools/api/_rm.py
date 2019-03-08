@@ -2,6 +2,8 @@ import logging
 
 from gedmatch_tools.util import Credentials
 from gedmatch_tools.util import main_page
+from gedmatch_tools.api._constants import KITS_XPATH
+from gedmatch_tools.api._util import kit_from_columns
 
 
 def _rm(number: str) -> None:
@@ -11,14 +13,13 @@ def _rm(number: str) -> None:
     driver = main_page()
 
     try:
-        kits_xpath = '/html/body/center/table/tbody/tr[2]/td/center/table[1]/tbody/tr/td[1]/' + \
-            'table/tbody/tr[4]/td/table/tbody/tr[3]/td/table'
-        kits_table = driver.find_element_by_xpath(kits_xpath)
+        kits_table = driver.find_element_by_xpath(KITS_XPATH)
         for row in kits_table.find_elements_by_tag_name('tr'):
             columns = row.find_elements_by_tag_name('td')
-            if columns[0].text != number:
+            kit: Kit = kit_from_columns(columns)
+            if kit.number != number:
                 continue
-            elem = columns[3].find_element_by_css_selector(
+            elem = columns[-1].find_element_by_css_selector(
                 "form[action='KitProfile.php']"
             )
             elem.click()
