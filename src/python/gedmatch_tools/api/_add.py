@@ -78,7 +78,7 @@ def _add(genotypes: Path, name: str, fam: Optional[Path] = None) -> Kit:
         submit.click()
 
         wait_for_css_selector = 'a[href="select.php"]'
-        WebDriverWait(driver, 30).until(
+        WebDriverWait(driver, 90).until(
             expected_conditions.visibility_of_element_located(
                 (By.CSS_SELECTOR, wait_for_css_selector)))
 
