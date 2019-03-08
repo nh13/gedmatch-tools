@@ -13,7 +13,7 @@ def _ls() -> List[Kit]:
 
     try:
         kits_xpath = '/html/body/center/table/tbody/tr[2]/td/center/table[1]/tbody/tr/td[1]' + \
-                     '/table/tbody/tr[4]/td/table/tbody/tr[3]/td/table'
+                     '/table/tbody/tr[4]/td/table/tbody/tr[4]/td/table'
         kits_table = driver.find_element_by_xpath(kits_xpath)
         for row in kits_table.find_elements_by_tag_name('tr'):
             columns = row.find_elements_by_tag_name('td')
