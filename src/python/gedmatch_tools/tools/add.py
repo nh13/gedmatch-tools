@@ -43,6 +43,7 @@ def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None
         assert 'genotypes_path' in header
         assert 'name' in header
         fh_out.write(','.join(header + ['number']) + '\n')
+        fh_out.flush()
         for line in fh_in:
             fields = line.rstrip('\r\n').split(',')
             d = dict(zip(header, fields))
@@ -54,13 +55,14 @@ def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None
                 kit = add_api(genotypes_path, name, fam)
             except Exception as e:
                 if not keep_going:
-                    logging.warning('Upload failed {name}: {genotypes_path}')
+                    logging.warning(f'Upload failed {name}: {genotypes_path}')
                     raise e
                 else:
-                    logging.exception('Upload failed {name}: {genotypes_path}')
+                    logging.exception(f'Upload failed {name}: {genotypes_path}')
             if kit is None:
                 fields = fields + ['failed']
             else:
                 logging.info(f'Kit number: {kit.number}')
                 fields = fields + [kit.number]
             fh_out.write(','.join(fields) + '\n')
+            fh_out.flush()
