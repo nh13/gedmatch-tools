@@ -32,6 +32,7 @@ def one_to_one_tuples(*,
         output_prefix: the path prefix for the output files.
     '''
 
+    logging.info(f'retrieving list of kits.')
     kits_dict: Dict[str, Kit] = dict([(kit.number, kit) for kit in ls()])
 
     results: List[Optional[OneToOneAutosomeResult]] = []

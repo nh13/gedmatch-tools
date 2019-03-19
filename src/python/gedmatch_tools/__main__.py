@@ -4,7 +4,8 @@ import defopt
 
 from gedmatch_tools.tools.add import add, add_all
 from gedmatch_tools.tools.ls import ls
-from gedmatch_tools.tools.one_to_many import one_to_many
+from gedmatch_tools.tools.one_to_many import one_to_many, \
+    one_to_many_tuples
 from gedmatch_tools.tools.one_to_one import one_to_one, \
     one_to_one_tuples
 from gedmatch_tools.tools.rm import rm, rm_r
@@ -22,7 +23,8 @@ def main() -> None:
         rm_r,
         one_to_one,
         one_to_one_tuples,
-        one_to_many
+        one_to_many,
+        one_to_many_tuples
     ])
 
 
