@@ -14,6 +14,7 @@ def _rm(number: str) -> None:
 
     try:
         kits_table = driver.find_element_by_xpath(KITS_XPATH)
+        found_kit = False
         for row in kits_table.find_elements_by_tag_name('tr'):
             columns = row.find_elements_by_tag_name('td')
             kit: Kit = kit_from_columns(columns)
@@ -23,7 +24,11 @@ def _rm(number: str) -> None:
                 "form[action='KitProfile.php']"
             )
             elem.click()
+            found_kit = True
             break
+
+        if not found_kit:
+            raise Exception(f'Could not find kit {kit.number} to delete.')
 
         tab = driver.find_element_by_css_selector("a[href='#2a']")
         tab.click()
