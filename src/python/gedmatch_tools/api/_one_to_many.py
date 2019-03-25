@@ -54,6 +54,7 @@ def _one_to_many(kit: str,
             assert len(header) == 10, f'header: {header}'
 
             last_row: int = len(rows) if max_matches is None else max_matches + 1
+            logging.info(f'Reading rows for {kit}')
             for row_num, row in enumerate(rows[1:last_row], 1):
                 if row_num % 10 == 0:
                     logging.info(f'Reading row ({row_num}/{len(rows)-1})')
@@ -72,6 +73,7 @@ def _one_to_many(kit: str,
                     date_compared=d['Date Compared']
                 )
                 results.append(result)
+            logging.info(f'Returning {len(results)} results.')
 
 
     except Exception as e:

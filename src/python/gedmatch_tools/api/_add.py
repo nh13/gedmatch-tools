@@ -6,11 +6,14 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import Select, WebDriverWait
 
-from gedmatch_tools.util import Kit
+from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import main_page
 
 
-def _add(genotypes: Path, name: str, fam: Optional[Path] = None) -> Kit:
+def _add(genotypes: Path,
+         name: str,
+         raw_data_type: Optional[RawDataType] = None,
+         fam: Optional[Path] = None) -> Kit:
     '''Performs a generic upload of the given genotype.
 
     The sample information when given will be used to determine the sex of the donor, otherwise
@@ -19,6 +22,7 @@ def _add(genotypes: Path, name: str, fam: Optional[Path] = None) -> Kit:
     Args:
         genotypes: the path to the genotype file.
         name: the name of the donor.
+        raw_data_type: optionally the raw data type to select.
         fam: optionally a PLINK sample information file; see the following link
              https://www.cog-genomics.org/plink2/formats#fam
 
@@ -60,8 +64,9 @@ def _add(genotypes: Path, name: str, fam: Optional[Path] = None) -> Kit:
             "input[type='radio'][value='Y'][name='Authorized']")
         in_authorized.click()
 
+        raw_data_type_value = str(6 if raw_data_type is None else raw_data_type.value)
         in_auth = driver.find_element_by_css_selector(
-            "input[type='radio'][value='6'][name='auth']")
+            "input[type='radio'][value='" + raw_data_type_value + "'][name='auth']")
         in_auth.click()
 
         in_public = driver.find_element_by_css_selector(

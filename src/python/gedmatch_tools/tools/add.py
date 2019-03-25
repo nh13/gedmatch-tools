@@ -3,9 +3,13 @@ from pathlib import Path
 from typing import Optional
 
 from gedmatch_tools.api import add as add_api
+from gedmatch_tools.util import RawDataType
 
 
-def add(*, genotypes: Path, name: str, fam: Optional[Path] = None) -> None:
+def add(*, genotypes: Path,
+        name: str,
+        raw_data_type: Optional[RawDataType] = None,
+        fam: Optional[Path] = None) -> None:
     '''Performs a generic upload of the given genotype.
 
     The sample information when given will be used to determine the sex of the donor, otherwise
@@ -14,10 +18,11 @@ def add(*, genotypes: Path, name: str, fam: Optional[Path] = None) -> None:
     Args:
         genotypes: the path to the genotype file.
         name: the name of the donor.
+        raw_data_type: optionally the raw data type to select.
         fam: optionally a PLINK sample information file; see the following link
              `https://www.cog-genomics.org/plink2/formats#fam`
     '''
-    add_api(genotypes, name, fam)
+    add_api(genotypes, name, raw_data_type, fam)
 
 
 def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None, keep_going: bool = False) -> None:
@@ -31,6 +36,9 @@ def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None
     2. `name` - the name of the donor
     The output manifest will have a `number` column appended, containing the kit number for each
     sample.
+
+    The following columns are optional but will be used if present:
+    3. `raw_data_type` - optionally the raw data type to select.
 
     Args:
         in_manifest: the path to input manifest
@@ -52,7 +60,10 @@ def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None
             logging.info(f'Uploading {name}: {genotypes_path}')
             kit = None
             try:
-                kit = add_api(genotypes_path, name, fam)
+                raw_data_type: Optional[RawDataType] = None
+                if 'raw_data_type' in header:
+                    raw_data_type = RawDataType.from_name(name=d['raw_data_type'])
+                kit = add_api(genotypes_path, name, raw_data_type, fam)
             except Exception as e:
                 if not keep_going:
                     logging.warning(f'Upload failed {name}: {genotypes_path}')

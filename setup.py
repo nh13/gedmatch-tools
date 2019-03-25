@@ -18,7 +18,7 @@ setup(
     #package_dir = {'gedmatch_tools':'src/python/gedmatch_tools'},
 	packages = find_packages(where='src/python/'),
 	package_dir = {'': 'src/python/'},
-    install_requires = ['attrs>=17.4.0', 'selenium>=3.11.0'],
+    install_requires = ['attrs>=17.4.0', 'selenium>=3.11.0', 'lxml>=4.3.2'],
     classifiers = [
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

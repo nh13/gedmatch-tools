@@ -4,6 +4,7 @@ import logging
 import os
 from pathlib import Path
 from typing import Optional
+import enum
 
 import attr
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -108,3 +109,24 @@ class Credentials(object):
             email = os.environ['GEDMATCH_EMAIL']
             password = os.environ['GEDMATCH_PASSWORD']
         return Credentials(email=email, password=password)
+
+
+@enum.unique
+class RawDataType(enum.IntEnum):
+
+    yours = 1
+    legal_guardian = 2
+    authorized = 3
+    deceased = 4
+    law_enforcement = 5
+    artificial = 6
+    artifact = 7
+    none = 8
+
+    @classmethod
+    def from_name(cls, name: str) -> 'RawDataType':
+        for item in RawDataType:
+            if item.name == name:
+                return item
+        raise ValueError(f'Could not find RawDataType with name "{name}"')
+
