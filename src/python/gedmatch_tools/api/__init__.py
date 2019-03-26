@@ -11,6 +11,7 @@ from gedmatch_tools.api._rm import _rm_impl
 from gedmatch_tools.util import Credentials
 from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import main_page
+from datetime import datetime
 
 
 def one_to_one(kit_one: str,
@@ -86,8 +87,15 @@ def rm(*number: str) -> None:
 
     credentials = Credentials.build()
     driver = main_page()
+    last_time = datetime.now()
     for n in number:
+        # Re-login if it takes too long
+        if (datetime.now() - last_time).total_seconds() > 30:
+            driver.close()
+            driver = main_page()
+        last_time = datetime.now()
         _rm_impl(number=n, credentials=credentials, driver=driver)
+
     driver.close()
 
 
