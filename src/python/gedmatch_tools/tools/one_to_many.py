@@ -1,8 +1,9 @@
 import logging
 from pathlib import Path
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from gedmatch_tools.api import ls, one_to_many as one_to_many_api, OneToManyAutosomeResult
+from gedmatch_tools.util import Kit
 
 
 def one_to_many(*,
@@ -23,10 +24,10 @@ def one_to_many(*,
 
 
 def one_to_many_tuples(*,
-                      kits: List[str],
-                      output_prefix: Path,
-                      max_matches: Optional[int] = None
-                      ) -> List[Optional[List[OneToManyAutosomeResult]]]:
+                       kits: List[str],
+                       output_prefix: Path,
+                       max_matches: Optional[int] = None
+                       ) -> List[Optional[List[OneToManyAutosomeResult]]]:
     '''Performs one-to-many autosomal analysis.
 
     Args:

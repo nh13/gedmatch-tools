@@ -74,8 +74,6 @@ def _one_to_many(kit: str,
                 )
                 results.append(result)
             logging.info(f'Returning {len(results)} results.')
-
-
     except Exception as e:
         driver.close()
         raise e

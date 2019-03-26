@@ -12,6 +12,7 @@ from gedmatch_tools.api._util import kit_from_columns, kit_from_lxml_row
 from gedmatch_tools.util import Credentials
 from gedmatch_tools.util import main_page
 from gedmatch_tools.util.settings import genesis_home_page_url
+from gedmatch_tools.util import Kit
 
 
 def _rm_impl(number: str, credentials: Credentials, driver: WebDriver) -> None:
@@ -24,7 +25,7 @@ def _rm_impl(number: str, credentials: Credentials, driver: WebDriver) -> None:
         for idx, row in enumerate(root.xpath(KITS_XPATH + '//tr')):
             kit: Kit = kit_from_lxml_row(row)
             if kit.number == number:
-                row_index  = idx
+                row_index = idx
                 break
 
         if row_index < 0:
@@ -34,7 +35,7 @@ def _rm_impl(number: str, credentials: Credentials, driver: WebDriver) -> None:
         kits_table = driver.find_element_by_xpath(KITS_XPATH)
         row = kits_table.find_elements_by_tag_name('tr')[row_index]
         columns = row.find_elements_by_tag_name('td')
-        kit: Kit = kit_from_columns(columns)
+        kit = kit_from_columns(columns)
         assert kit.number == number
         elem = columns[-1].find_element_by_css_selector("form[action='KitProfile.php']")
         elem.click()

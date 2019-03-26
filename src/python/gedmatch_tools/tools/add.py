@@ -25,7 +25,11 @@ def add(*, genotypes: Path,
     add_api(genotypes, name, raw_data_type, fam)
 
 
-def add_all(*, in_manifest: Path, out_manifest: Path, fam: Optional[Path] = None, keep_going: bool = False) -> None:
+def add_all(*,
+            in_manifest: Path,
+            out_manifest: Path,
+            fam: Optional[Path] = None,
+            keep_going: bool = False) -> None:
     '''Performs a generic upload of one or more genotypes specified in a manifest file.
 
     The sample information when given will be used to determine the sex of the donor, otherwise

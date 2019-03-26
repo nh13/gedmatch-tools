@@ -7,7 +7,7 @@ from gedmatch_tools.api._one_to_many import OneToManyAutosomeResult  # noqa: F40
 from gedmatch_tools.api._one_to_many import _one_to_many
 from gedmatch_tools.api._one_to_one import SegmentResult  # noqa: F401
 from gedmatch_tools.api._one_to_one import _one_to_one, OneToOneAutosomeResult
-from gedmatch_tools.api._rm import _rm, _rm_impl
+from gedmatch_tools.api._rm import _rm_impl
 from gedmatch_tools.util import Credentials
 from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import main_page
@@ -93,4 +93,4 @@ def rm(*number: str) -> None:
 
 def rm_r() -> None:
     '''Removes all kits on the GEDMatch website.'''
-    rm(*ls())
+    rm(*ls())  # type: ignore

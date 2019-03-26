@@ -129,4 +129,3 @@ class RawDataType(enum.IntEnum):
             if item.name == name:
                 return item
         raise ValueError(f'Could not find RawDataType with name "{name}"')
-
