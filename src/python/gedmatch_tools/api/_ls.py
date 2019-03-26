@@ -1,10 +1,11 @@
 from typing import List
 
-from gedmatch_tools.util import Kit
-from gedmatch_tools.util import main_page
+import lxml.html
+
 from gedmatch_tools.api._constants import KITS_XPATH
 from gedmatch_tools.api._util import kit_from_lxml_row
-import lxml.html
+from gedmatch_tools.util import Kit
+from gedmatch_tools.util import main_page
 
 
 def _ls() -> List[Kit]:

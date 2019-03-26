@@ -1,16 +1,18 @@
 import logging
 
-from gedmatch_tools.util import Credentials
-from gedmatch_tools.util import main_page
+import lxml.html
+from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
+
+from gedmatch_tools.api._constants import HOME_PAGE_XPATH
 from gedmatch_tools.api._constants import KITS_XPATH
 from gedmatch_tools.api._util import kit_from_columns, kit_from_lxml_row
-import lxml.html
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import Select, WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.common.by import By
+from gedmatch_tools.util import Credentials
+from gedmatch_tools.util import main_page
 from gedmatch_tools.util.settings import genesis_home_page_url
-from gedmatch_tools.api._constants import HOME_PAGE_XPATH
+
 
 def _rm_impl(number: str, credentials: Credentials, driver: WebDriver) -> None:
     '''Removes the kit with the given number.'''

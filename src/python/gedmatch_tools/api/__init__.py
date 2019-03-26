@@ -8,8 +8,8 @@ from gedmatch_tools.api._one_to_many import _one_to_many
 from gedmatch_tools.api._one_to_one import SegmentResult  # noqa: F401
 from gedmatch_tools.api._one_to_one import _one_to_one, OneToOneAutosomeResult
 from gedmatch_tools.api._rm import _rm, _rm_impl
-from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import Credentials
+from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import main_page
 
 

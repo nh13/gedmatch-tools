@@ -1,10 +1,10 @@
 '''Useful utility methods.'''
 
+import enum
 import logging
 import os
 from pathlib import Path
 from typing import Optional
-import enum
 
 import attr
 from selenium.webdriver.remote.webdriver import WebDriver
