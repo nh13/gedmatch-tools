@@ -3,17 +3,20 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import attr
+import lxml.html
 
 from gedmatch_tools.api._ls import _ls
 from gedmatch_tools.util import Kit
 from gedmatch_tools.util import main_page
 from gedmatch_tools.util.metric import write_metrics
-
+from selenium.webdriver.remote.webdriver import WebDriver
+from typing import Optional
 
 def _one_to_many(kit: str,
                  output: Path,
                  max_matches: Optional[int],
-                 kits: Optional[Dict[str, Kit]] = None
+                 kits: Optional[Dict[str, Kit]] = None,
+                 driver: Optional[WebDriver] = None
                  ) -> List['OneToManyAutosomeResult']:
     '''Performs one-to-many autosomal analysis.
 
@@ -28,37 +31,37 @@ def _one_to_many(kit: str,
     '''
     results: List['OneToManyAutosomeResult'] = []
 
+    _driver = main_page() if driver is None else driver
+
     if kits is None:
-        kits = dict([(kit.number, kit) for kit in _ls()])
+        kits = dict([(kit.number, kit) for kit in _ls(_driver)])
 
     if kit not in kits:
         kit = [n for n, k in kits.items() if k.name == kit][0]
 
-    driver = main_page()
 
     try:
         url = f'OneToMany0Tier2.php?kit_num={kit}'
-        page = driver.find_element_by_xpath('//a[@href="' + url + '"]')
+        page = _driver.find_element_by_xpath('//a[@href="' + url + '"]')
         page.click()
 
-        for table in driver.find_elements_by_xpath('//table'):
-            rows = table.find_elements_by_tag_name('tr')
+
+        root = lxml.html.fromstring(_driver.page_source)
+        for table in root.xpath("//table"):
+            rows = [row for row in table.xpath('.//tr')]
 
             # check that the first column in the first row has value "Chr"
-            tds = rows[0].find_elements_by_tag_name('td')
+            tds = rows[0].xpath('.//td')
             first_column_value = tds[0].text
             if first_column_value != 'Kit':
                 continue
-
             header = [td.text for td in tds]
             assert len(header) == 10, f'header: {header}'
 
             last_row: int = len(rows) if max_matches is None else max_matches + 1
             logging.info(f'Reading rows for {kit}')
             for row_num, row in enumerate(rows[1:last_row], 1):
-                if row_num % 10 == 0:
-                    logging.info(f'Reading row ({row_num}/{len(rows)-1})')
-                columns = [td.text for td in row.find_elements_by_tag_name('td')]
+                columns = [td.text for td in row.xpath('.//td')]
                 assert len(columns) == 10, f'columns: {columns}'
                 d = dict(zip(header, columns))
 
@@ -75,10 +78,11 @@ def _one_to_many(kit: str,
                 results.append(result)
             logging.info(f'Returning {len(results)} results.')
     except Exception as e:
-        driver.close()
+        _driver.close()
         raise e
 
-    driver.close()
+    if driver is None:
+        _driver.close()
 
     write_metrics(output, results)
 

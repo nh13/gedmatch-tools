@@ -12,6 +12,7 @@ from gedmatch_tools.util import Credentials
 from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import main_page
 from datetime import datetime
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 def one_to_one(kit_one: str,
@@ -36,8 +37,9 @@ def one_to_one(kit_one: str,
 def one_to_many(kit: str,
                 output: Path,
                 max_matches: Optional[int],
-                kits: Optional[Dict[str, Kit]] = None
-                ) -> List[OneToManyAutosomeResult]:
+                kits: Optional[Dict[str, Kit]] = None,
+                driver: Optional[WebDriver] = None) -> \
+        List[OneToManyAutosomeResult]:
     '''Performs one-to-many autosomal analysis.
 
     Args:
@@ -49,7 +51,7 @@ def one_to_many(kit: str,
     Returns:
         A list of matches.
     '''
-    return _one_to_many(kit, output, max_matches, kits)
+    return _one_to_many(kit, output, max_matches, kits, driver)
 
 
 def add(genotypes: Path,
@@ -77,9 +79,9 @@ def add(genotypes: Path,
     return _add(genotypes, name, raw_data_type, fam)
 
 
-def ls() -> List[Kit]:
+def ls(driver: Optional[WebDriver] = None) -> List[Kit]:
     '''Returns the the kits available on GEDMatch.com'''
-    return _ls()
+    return _ls(driver)
 
 
 def rm(*number: str) -> None:

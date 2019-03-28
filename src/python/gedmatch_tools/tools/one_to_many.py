@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 
 from gedmatch_tools.api import ls, one_to_many as one_to_many_api, OneToManyAutosomeResult
 from gedmatch_tools.util import Kit
+from gedmatch_tools.util import main_page
 
 
 def one_to_many(*,
@@ -36,17 +37,24 @@ def one_to_many_tuples(*,
         max_matches: the maximum # of matches to return
     '''
 
+    driver = main_page()
+
     logging.info(f'retrieving list of kits.')
-    kits_dict: Dict[str, Kit] = dict([(kit.number, kit) for kit in ls()])
+    kits_dict: Dict[str, Kit] = dict([(kit.number, kit) for kit in ls(driver)])
 
     results: List[Optional[List[OneToManyAutosomeResult]]] = []
     logging.info(f'processing {len(kits)} kit pairs.')
     for i, kit in enumerate(kits, 1):
         logging.info(f'processing ({i}/{len(kits)}): {kit}.')
         output = Path(str(output_prefix) + f'{kit}.txt')
-        result = one_to_many_api(kit=kit, output=output, max_matches=max_matches, kits=kits_dict)
+        result = one_to_many_api(kit=kit, output=output, max_matches=max_matches, kits=kits_dict,
+                                 driver=driver)
         if result is None:
             logging.warning(f'No 1:1 autosomal match found for kit {kit}.')
         results.append(result)
+
+        # go to home page
+        xpath = '/html/body/table[1]/tbody/tr[2]/td[2]/table/tbody/tr/td[1]/a'
+        driver.find_element_by_xpath(xpath).click()
 
     return results

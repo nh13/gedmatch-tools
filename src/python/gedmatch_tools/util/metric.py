@@ -27,6 +27,8 @@ def _to_tuples(obj: Any, print_all: bool = True) -> List[Tuple[str, str]]:
     for name, raw_value in raw_values:
         if isinstance(raw_value, (str, int, float)):
             values.append((name, str(raw_value)))
+        elif raw_value is None:
+            values.append((name, 'NA'))
         else:
             values.extend([(f'{name}_{sub_name}', sub_value)
                            for sub_name, sub_value in _to_tuples(raw_value, print_all=False)])
