@@ -2,7 +2,12 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.ui import WebDriverWait
+
 from gedmatch_tools.api import ls, one_to_many as one_to_many_api, OneToManyAutosomeResult
+from gedmatch_tools.api._constants import HOME_PAGE_XPATH
 from gedmatch_tools.util import Kit
 from gedmatch_tools.util import main_page
 
@@ -56,5 +61,10 @@ def one_to_many_tuples(*,
         # go to home page
         xpath = '/html/body/table[1]/tbody/tr[2]/td[2]/table/tbody/tr/td[1]/a'
         driver.find_element_by_xpath(xpath).click()
+        WebDriverWait(driver, 90).until(
+            expected_conditions.presence_of_element_located(
+                (By.XPATH, HOME_PAGE_XPATH)
+            )
+        )
 
     return results
