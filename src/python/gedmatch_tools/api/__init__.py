@@ -1,5 +1,8 @@
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
+
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from gedmatch_tools.api._add import _add
 from gedmatch_tools.api._ls import _ls
@@ -11,14 +14,13 @@ from gedmatch_tools.api._rm import _rm_impl
 from gedmatch_tools.util import Credentials
 from gedmatch_tools.util import Kit, RawDataType
 from gedmatch_tools.util import main_page
-from datetime import datetime
-from selenium.webdriver.remote.webdriver import WebDriver
 
 
 def one_to_one(kit_one: str,
                kit_two: str,
                output_prefix: Path,
-               kits: Optional[Dict[str, Kit]] = None
+               kits: Optional[Dict[str, Kit]] = None,
+               driver: Optional[WebDriver] = None
                ) -> Optional[OneToOneAutosomeResult]:
     '''Performs one-to-one autosomal analysis.
 
@@ -31,7 +33,7 @@ def one_to_one(kit_one: str,
     Returns:
         None if the analysis did not find any segments, otherwise the analysis results.
     '''
-    return _one_to_one(kit_one, kit_two, output_prefix, kits)
+    return _one_to_one(kit_one, kit_two, output_prefix, kits, driver)
 
 
 def one_to_many(kit: str,

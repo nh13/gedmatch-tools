@@ -1,16 +1,17 @@
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
+from typing import Optional
 
 import attr
 import lxml.html
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from gedmatch_tools.api._ls import _ls
 from gedmatch_tools.util import Kit
 from gedmatch_tools.util import main_page
 from gedmatch_tools.util.metric import write_metrics
-from selenium.webdriver.remote.webdriver import WebDriver
-from typing import Optional
+
 
 def _one_to_many(kit: str,
                  output: Path,
@@ -39,12 +40,10 @@ def _one_to_many(kit: str,
     if kit not in kits:
         kit = [n for n, k in kits.items() if k.name == kit][0]
 
-
     try:
         url = f'OneToMany0Tier2.php?kit_num={kit}'
         page = _driver.find_element_by_xpath('//a[@href="' + url + '"]')
         page.click()
-
 
         root = lxml.html.fromstring(_driver.page_source)
         for table in root.xpath("//table"):

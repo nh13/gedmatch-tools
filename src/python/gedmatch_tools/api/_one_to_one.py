@@ -2,6 +2,8 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import attr
+import lxml.html
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from gedmatch_tools.api._ls import _ls
 from gedmatch_tools.util import Kit
@@ -17,7 +19,8 @@ def _comma_value_to_int(value: str) -> int:
 def _one_to_one(kit_one: str,
                 kit_two: str,
                 output_prefix: Path,
-                kits: Optional[Dict[str, Kit]] = None
+                kits: Optional[Dict[str, Kit]] = None,
+                driver: Optional[WebDriver] = None
                 ) -> Optional['OneToOneAutosomeResult']:
     '''Performs one-to-one autosomal analysis.
 
@@ -30,43 +33,45 @@ def _one_to_one(kit_one: str,
     Returns:
         None if the analysis did not find any segments, otherwise the analysis results.
     '''
+    _driver = main_page() if driver is None else driver
+
     if kits is None:
-        kits = dict([(kit.number, kit) for kit in _ls()])
+        kits = dict([(kit.number, kit) for kit in _ls(_driver)])
 
     if kit_one not in kits:
         kit_one = [n for n, k in kits.items() if k.name == kit_one][0]
     if kit_two not in kits:
         kit_two = [n for n, k in kits.items() if k.name == kit_two][0]
 
-    driver = main_page()
-
     try:
         url = 'v_compare1.php'
-        page = driver.find_element_by_xpath('//a[@href="' + url + '"]')
+        page = _driver.find_element_by_xpath('//a[@href="' + url + '"]')
         page.click()
 
-        kit1 = driver.find_element_by_name('kit1')
+        kit1 = _driver.find_element_by_name('kit1')
         kit1.clear()
         kit1.send_keys(kit_one)
 
-        kit2 = driver.find_element_by_name('kit2')
+        kit2 = _driver.find_element_by_name('kit2')
         kit2.clear()
         kit2.send_keys(kit_two)
 
-        submit = driver.find_element_by_name('xsubmit')
+        submit = _driver.find_element_by_name('xsubmit')
         submit.click()
 
         segments: List[SegmentResult] = []
-        for table in driver.find_elements_by_xpath('//table'):
-            rows = table.find_elements_by_tag_name('tr')
+        root = lxml.html.fromstring(_driver.page_source)
+        for table in root.xpath("//table"):
+            rows = [row for row in table.xpath('.//tr')]
 
             # check that the first column in the first row has value "Chr"
-            first_column_value = rows[0].find_elements_by_tag_name('td')[0].text
+            tds = rows[0].xpath('.//td')
+            first_column_value = tds[0].text
             if first_column_value != 'Chr':
                 continue
 
             for row in rows[1:]:
-                columns = row.find_elements_by_tag_name('td')
+                columns = row.xpath('.//td')
                 assert len(columns) == 5
 
                 segment = SegmentResult(
@@ -87,7 +92,7 @@ def _one_to_one(kit_one: str,
         pct_snps_identical: float = 0.0
         version: str = 'none found'
 
-        for line in driver.page_source.split('\n'):
+        for line in _driver.page_source.split('\n'):
             line = line.rstrip('\r\n').strip()
             line = line.replace('<br>', '')
 
@@ -132,10 +137,11 @@ def _one_to_one(kit_one: str,
             )
 
     except Exception as e:
-        driver.close()
+        _driver.close()
         raise e
 
-    driver.close()
+    if driver is None:
+        _driver.close()
 
     if final_result is not None:
         summary: Path = Path(str(output_prefix) + '.summary.txt')

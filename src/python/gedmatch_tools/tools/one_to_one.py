@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 
 from gedmatch_tools.api import ls, one_to_one as one_to_one_api, OneToOneAutosomeResult
 from gedmatch_tools.util import Kit
+from gedmatch_tools.util import main_page
 from gedmatch_tools.util.metric import write_metrics
 
 
@@ -32,8 +33,10 @@ def one_to_one_tuples(*,
         output_prefix: the path prefix for the output files.
     '''
 
+    driver = main_page()
+
     logging.info(f'retrieving list of kits.')
-    kits_dict: Dict[str, Kit] = dict([(kit.number, kit) for kit in ls()])
+    kits_dict: Dict[str, Kit] = dict([(kit.number, kit) for kit in ls(driver)])
 
     results: List[Optional[OneToOneAutosomeResult]] = []
     logging.info(f'processing {len(kits)} kit pairs.')
@@ -44,7 +47,8 @@ def one_to_one_tuples(*,
         result = one_to_one_api(kit_one=kit_one,
                                 kit_two=kit_two,
                                 output_prefix=tuple_output_prefix,
-                                kits=kits_dict)
+                                kits=kits_dict,
+                                driver=driver)
         if result is None:
             logging.warning(f'No 1:1 autosomal match found for kits {kit_one} and {kit_two}.')
         results.append(result)

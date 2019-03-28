@@ -12,9 +12,9 @@ def _to_tuples(obj: Any, print_all: bool = True) -> List[Tuple[str, str]]:
     '''Returns a list of name/value tuples for each attribute in the object.
 
     The object must be decorated by the :py:mod:`~attr` module.  If the object contains an
-    attribute whose class is also decorated by the :py:mod:`~attr` module, that attribuet will be
+    attribute whose class is also decorated by the :py:mod:`~attr` module, that attribute will be
     replaced by the attributes in the latter class.  The name returned for each sub-attribute will
-    be pre-pended with the original fields name seperated by an underscore.
+    be pre-pended with the original fields name separated by an underscore.
 
     Args:
         obj: an object who is decorated by the :py:mod:`~attr` module.
@@ -30,8 +30,11 @@ def _to_tuples(obj: Any, print_all: bool = True) -> List[Tuple[str, str]]:
         elif raw_value is None:
             values.append((name, 'NA'))
         else:
-            values.extend([(f'{name}_{sub_name}', sub_value)
-                           for sub_name, sub_value in _to_tuples(raw_value, print_all=False)])
+            try:
+                values.extend([(f'{name}_{sub_name}', sub_value)
+                               for sub_name, sub_value in _to_tuples(raw_value, print_all=False)])
+            except attr.exceptions.NotAnAttrsClassError:
+                pass
 
     return values
 

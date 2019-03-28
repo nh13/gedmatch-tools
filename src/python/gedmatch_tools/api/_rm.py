@@ -10,9 +10,9 @@ from gedmatch_tools.api._constants import HOME_PAGE_XPATH
 from gedmatch_tools.api._constants import KITS_XPATH
 from gedmatch_tools.api._util import kit_from_columns, kit_from_lxml_row
 from gedmatch_tools.util import Credentials
+from gedmatch_tools.util import Kit
 from gedmatch_tools.util import main_page
 from gedmatch_tools.util.settings import genesis_home_page_url
-from gedmatch_tools.util import Kit
 
 
 def _rm_impl(number: str, credentials: Credentials, driver: WebDriver) -> None:

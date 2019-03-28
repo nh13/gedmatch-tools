@@ -1,13 +1,13 @@
 from typing import List
+from typing import Optional
 
 import lxml.html
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from gedmatch_tools.api._constants import KITS_XPATH
 from gedmatch_tools.api._util import kit_from_lxml_row
 from gedmatch_tools.util import Kit
 from gedmatch_tools.util import main_page
-from selenium.webdriver.remote.webdriver import WebDriver
-from typing import Optional
 
 
 def _ls(driver: Optional[WebDriver] = None) -> List[Kit]:
