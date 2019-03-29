@@ -12,7 +12,7 @@ from gedmatch_tools.api._one_to_one import SegmentResult  # noqa: F401
 from gedmatch_tools.api._one_to_one import _one_to_one, OneToOneAutosomeResult
 from gedmatch_tools.api._rm import _rm_impl
 from gedmatch_tools.util import Credentials
-from gedmatch_tools.util import Kit, RawDataType
+from gedmatch_tools.util import Kit, KitStatus, RawDataType
 from gedmatch_tools.util import main_page
 
 
@@ -81,9 +81,13 @@ def add(genotypes: Path,
     return _add(genotypes, name, raw_data_type, fam)
 
 
-def ls(driver: Optional[WebDriver] = None) -> List[Kit]:
-    '''Returns the the kits available on GEDMatch.com'''
-    return _ls(driver)
+def ls(driver: Optional[WebDriver] = None, status: Optional[List[KitStatus]] = None) -> List[Kit]:
+    '''Returns the the kits available on GEDMatch.com
+
+    Args:
+        status: return only kits with the given status(es)
+    '''
+    return _ls(driver=driver, status=status)
 
 
 def rm(*number: str) -> None:

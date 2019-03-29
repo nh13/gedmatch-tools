@@ -50,18 +50,49 @@ def main_page() -> WebDriver:
 
 
 @attr.s(frozen=True)
+class _KitStatus(object):
+
+    value: int = attr.ib()
+    description: str = attr.ib()
+    src: str = attr.ib()
+
+
+@enum.unique
+class KitStatus(enum.Enum):
+
+    processing = _KitStatus(1,
+                            "Kit has not yet completed matching with other kits",
+                            './images/DaVinci25.gif')
+    completed = _KitStatus(2,
+                           "Kit has completed all processing and has good status",
+                           './images/check24.png')
+    duplicate = _KitStatus(3,
+                           "Likely duplicate - may need to be deleted",
+                           './images/two25.png')
+
+    @classmethod
+    def from_name(cls, name: str) -> 'KitStatus':
+        for item in KitStatus:
+            if item.name == name:
+                return item
+        raise ValueError(f'Could not find KitStatus with name "{name}"')
+
+
+@attr.s(frozen=True)
 class Kit(object):
     '''Class for storing information about a GEDMatch kit.
 
     Attributes:
         name: the name of the kit (assigned during import).
         number: the number of the kit (assigned by GEDMatch).
+        status: the status of the kit.
         email: the email used to register the kit.
         testing_company: the testing company of the kit.
     '''
 
     name: str = attr.ib()
     number: str = attr.ib()
+    status: Optional[KitStatus] = attr.ib(default=None, metadata={'print': False})
     email: Optional[str] = attr.ib(default=None, metadata={'print': False})
     testing_company: Optional[str] = attr.ib(default=None, metadata={'print': False})
 

@@ -9,6 +9,7 @@ from gedmatch_tools.tools.one_to_many import one_to_many, \
 from gedmatch_tools.tools.one_to_one import one_to_one, \
     one_to_one_tuples
 from gedmatch_tools.tools.rm import rm, rm_r
+from gedmatch_tools.util import KitStatus
 
 
 def main() -> None:
@@ -25,7 +26,9 @@ def main() -> None:
         one_to_one_tuples,
         one_to_many,
         one_to_many_tuples
-    ])
+    ],
+        parsers={KitStatus: KitStatus.from_name}
+    )
 
 
 if __name__ == '__main__':
