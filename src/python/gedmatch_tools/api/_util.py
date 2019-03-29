@@ -10,6 +10,16 @@ KIT_NAME_COLUMN: int = 3
 KIT_EDIT_COLUMN: int = -1
 
 
+def maybe_href(td) -> str:  # type: ignore
+    '''Extract the text from a column, which is either a text or an an <a></a> element'''
+    td_links = list(td.iterlinks())
+    if len(td_links) == 0:
+        return td.text
+    else:
+        assert len(td_links) == 1
+        return td_links[0][0].text
+
+
 def kit_from_lxml_row(row) -> Kit:  # type: ignore
     columns = row.xpath('.//td')
 
@@ -18,12 +28,7 @@ def kit_from_lxml_row(row) -> Kit:  # type: ignore
     number = list(number_col.iterlinks())[0][0].text
 
     # kit name
-    name_col = columns[KIT_NAME_COLUMN]
-    name_col_links = list(name_col.iterlinks())
-    if len(name_col_links) == 0:
-        name = name_col.text
-    else:
-        name = name_col_links[0][0].text
+    name = maybe_href(columns[KIT_NAME_COLUMN])
 
     # kit status
     status_col = columns[KIT_STATUS_COLUMN]

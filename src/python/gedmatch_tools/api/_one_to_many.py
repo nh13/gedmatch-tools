@@ -11,6 +11,7 @@ from gedmatch_tools.api._ls import _ls
 from gedmatch_tools.util import Kit
 from gedmatch_tools.util import main_page
 from gedmatch_tools.util.metric import write_metrics
+from gedmatch_tools.api._util import maybe_href
 
 
 def _one_to_many(kit: str,
@@ -60,7 +61,7 @@ def _one_to_many(kit: str,
             last_row: int = len(rows) if max_matches is None else max_matches + 1
             logging.info(f'Reading rows for {kit}')
             for row_num, row in enumerate(rows[1:last_row], 1):
-                columns = [td.text for td in row.xpath('.//td')]
+                columns = [maybe_href(td) for td in row.xpath('.//td')]
                 assert len(columns) == 10, f'columns: {columns}'
                 d = dict(zip(header, columns))
 
