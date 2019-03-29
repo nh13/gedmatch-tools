@@ -50,8 +50,8 @@ def one_to_many_tuples(*,
     results: List[Optional[List[OneToManyAutosomeResult]]] = []
     logging.info(f'processing {len(kits)} kit pairs.')
     for i, kit in enumerate(kits, 1):
-        logging.info(f'processing ({i}/{len(kits)}): {kit}.')
         output = Path(str(output_prefix) + f'{kit}.txt')
+        logging.info(f'processing ({i}/{len(kits)}): {kit}: {output}')
         result = one_to_many_api(kit=kit, output=output, max_matches=max_matches, kits=kits_dict,
                                  driver=driver)
         if result is None:
@@ -66,5 +66,7 @@ def one_to_many_tuples(*,
                 (By.XPATH, HOME_PAGE_XPATH)
             )
         )
+
+    driver.close()
 
     return results

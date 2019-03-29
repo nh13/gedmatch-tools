@@ -57,4 +57,6 @@ def one_to_one_tuples(*,
     summary: Path = Path(str(output_prefix) + '.summary.txt')
     write_metrics(summary, results)
 
+    driver.close()
+
     return results
