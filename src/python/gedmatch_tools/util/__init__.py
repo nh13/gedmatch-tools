@@ -60,6 +60,9 @@ class _KitStatus(object):
 @enum.unique
 class KitStatus(enum.Enum):
 
+    tokenizing = _KitStatus(0,
+                            "Tokenizing",
+                            './images/tokenize.gif')
     processing = _KitStatus(1,
                             "Kit has not yet completed matching with other kits",
                             './images/DaVinci25.gif')
