@@ -32,7 +32,7 @@ def _ls(driver: Optional[WebDriver] = None, status: Optional[List[KitStatus]] = 
         _driver.close()
         raise e
 
-    if _driver is None:
+    if driver is None:
         _driver.close()
 
     return kits
