@@ -19,25 +19,12 @@ def _rm_impl(number: str, credentials: Credentials, driver: WebDriver) -> None:
     '''Removes the kit with the given number.'''
 
     try:
-        # First try to find the row quickly
-        root = lxml.html.fromstring(driver.page_source)
-        row_index = -1
-        for idx, row in enumerate(root.xpath(KITS_XPATH + '//tr')):
-            kit: Kit = kit_from_lxml_row(row)
-            if kit.number == number:
-                row_index = idx
-                break
-
-        if row_index < 0:
-            raise Exception(f'Could not find kit {number} to delete.')
-
-        # Click on the edit/pencil button
-        kits_table = driver.find_element_by_xpath(KITS_XPATH)
-        row = kits_table.find_elements_by_tag_name('tr')[row_index]
-        columns = row.find_elements_by_tag_name('td')
-        kit = kit_from_columns(columns)
-        assert kit.number == number
-        elem = columns[-1].find_element_by_css_selector("form[action='KitProfile.php']")
+        try:
+            elem = driver.find_element_by_xpath(
+                f"//form[input/@name='ref_num'][input/@value='{number}']"
+            )
+        except Exception as e:
+            raise Exception(f'Could not find kit {number} to delete.') from e
         elem.click()
 
         tab = driver.find_element_by_css_selector("a[href='#2a']")

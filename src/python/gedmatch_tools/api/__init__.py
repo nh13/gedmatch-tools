@@ -1,3 +1,5 @@
+import logging
+
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -96,7 +98,9 @@ def rm(*number: str) -> None:
     credentials = Credentials.build()
     driver = main_page()
     last_time = datetime.now()
-    for n in number:
+    num_kits = len(number)
+    for i, n in enumerate(number, 1):
+        logging.info(f'Deleting kit: {n} {i}/{num_kits}')
         # Re-login if it takes too long
         if (datetime.now() - last_time).total_seconds() > 30:
             driver.close()
