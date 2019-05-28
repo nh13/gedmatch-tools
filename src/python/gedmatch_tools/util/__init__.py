@@ -72,6 +72,9 @@ class KitStatus(enum.Enum):
     duplicate = _KitStatus(3,
                            "Likely duplicate - may need to be deleted",
                            './images/two25.png')
+    unknown = _KitStatus(4,
+                         "Unknown Status",
+                         './images/path.gif')
 
     @classmethod
     def from_name(cls, name: str) -> 'KitStatus':
