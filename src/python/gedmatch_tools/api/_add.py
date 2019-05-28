@@ -60,17 +60,13 @@ def _add(genotypes: Path,
         in_source = Select(driver.find_element_by_name('source'))
         in_source.select_by_index(21)  # other
 
-        in_authorized = driver.find_element_by_css_selector(
-            "input[type='radio'][value='Y'][name='Authorized']")
-        in_authorized.click()
-
         raw_data_type_value = str(6 if raw_data_type is None else raw_data_type.value)
         in_auth = driver.find_element_by_css_selector(
             "input[type='radio'][value='" + raw_data_type_value + "'][name='auth']")
         in_auth.click()
 
         in_public = driver.find_element_by_css_selector(
-            "input[type='radio'][value='Y'][name='public_A']"
+            "input[type='radio'][value='Y'][name='public2']"
         )
         in_public.click()
 
@@ -82,15 +78,18 @@ def _add(genotypes: Path,
             "input[type='submit'][name='gedsubmit']")
         submit.click()
 
-        wait_for_css_selector = 'a[href="select.php"]'
+        wait_for_link_text = 'Click here to get to Home'
         WebDriverWait(driver, 90).until(
             expected_conditions.visibility_of_element_located(
-                (By.CSS_SELECTOR, wait_for_css_selector)))
+                (By.LINK_TEXT, wait_for_link_text)))
 
         for line in driver.page_source.split('\n'):
             if 'Assigned kit number:' in line:
                 line = line.rstrip('\r\n').strip().replace('</font>', '')
                 kit_number = line.split('>')[-1]
+                break
+        else:
+            raise ValueError('No kit number returned by GEDmatch.')
 
     except Exception as e:
         print(driver.page_source)
