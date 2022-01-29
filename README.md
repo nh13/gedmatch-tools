@@ -6,7 +6,7 @@
 gedmatch-tools
 ====
 
-** This repository is no longer maintained.  It also has not been tested or used on any recent (2020 or beyond) version of GEDMatch.  Please do not expect support or responses. ** 
+**This repository is no longer maintained.  It also has not been tested or used on any recent (2020 or beyond) version of GEDMatch.  Please do not expect support or responses.** 
 
 Tools and Python API for [GEDMatch Genesis](https://genesis.gedmatch.com).
 
